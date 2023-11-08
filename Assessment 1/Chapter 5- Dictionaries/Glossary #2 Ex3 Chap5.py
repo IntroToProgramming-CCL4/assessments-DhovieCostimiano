@@ -9,4 +9,6 @@ glossary= {'loops':'Loops are used when we want to execute code statements multi
            'variables': 'These are containers for storing data values. Each variable must have a unique name called identifier.',
            'constants': 'These are variable whose values do not change'}
 for key, value in glossary.items():
+#for loops can also be used in a dictionary
     print ('\nPrograming word:', key,  '\nDefinition:', value)
+#you can call out keys and value using this code
