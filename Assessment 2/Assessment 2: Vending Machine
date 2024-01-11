@@ -1,0 +1,170 @@
+import os
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def display_items(items, category):
+    print(f"{category.capitalize()}:")
+    for item in items:
+        print(f"Code: {item['Code']}\tName: {item['Name']}\t\tPrice: ${item['Price']}")
+
+def suggest_pants(selected_shirt_code, pants_list):
+    print("Suggested Pants:")
+    for pants in pants_list:
+        print(f"Code: {pants['Code']}\tName: {pants['Name']}\t\tPrice: ${pants['Price']}")
+
+cart = []
+total_price = 0
+
+# H&M Pants and Shirts
+HMpants = [
+    {'Code':'1A','Name':'Slim Cargo Jeans','Price':60},
+    {'Code':'1B','Name':'Flared Slim Jeans','Price':70},
+    {'Code':'1C','Name':'Relaxed Jeans','Price':60}
+]
+
+HMshirts = [
+    {'Code': '2A', 'Name': 'Tank Top White', 'Price': 20},
+    {'Code': '2B', 'Name': 'Cotton Polo', 'Price': 20},
+    {'Code': '2C', 'Name': 'Long Sleeve Polo', 'Price': 30}
+]
+
+# ... (similar data for UNIQLO and ZARA)
+
+def UNIQLO_pants_D(pants):
+    for uniq in UNIQLOpants:
+        print(f"Code: {uniq['Code']}\tName: {uniq['Name']}\t\tPrice: ${uniq['Price']}")
+UNIQLOpants=[
+    {'Code':'3A','Name':'Cargo Pants','Price':50},
+    {'Code':'3B','Name':'Parachute Pants', 'Price':55},
+    {'Code':'3C','Name':'Smart Pants','Price':45}
+    ]
+
+
+##shirts
+
+
+def UNIQLO_shirts_D(shirts):
+    for uni in UNIQLOshirts:
+        print(f"Code: {uni['Code']}\tName: {uni['Name']}\t\tPrice: ${uni['Price']}")
+UNIQLOshirts=[
+    {'Code':'4A','Name':'AIRism','Price':30},
+    {'Code':'4B','Name':'Fleece','Price':35},
+    {'Code':'4C','Name':'Crew Neck','Price':30}
+    ]
+
+############################################################################################################
+#Zara
+##Pants
+def ZARA_pants_D(pants):
+    for ZA in ZARApants:
+        print(f"Code: {ZA['Code']}\tName: {ZA['Name']}\t\tPrice: ${ZA['Price']}")
+ZARApants=[
+    {'Code':'5A','Name':'Trouser','Price':40},
+    {'Code':'5B','Name':'Shorts','Price':45},
+    {'Code':'5C','Name':'Chinos','Price':40}
+    ]
+
+
+##Shirts
+def ZARA_shirts_D(shirts):
+    for RA in ZARAshirts:
+        print(f"Code: {RA['Code']}\tName: {RA['Name']}\t\tPrice: ${RA['Price']}")
+ZARAshirts=[
+    {'Code':'6A','Name':'Linen Shirt','Price':35},
+    {'Code':'6B','Name':'Velvet Shirt','Price':40},
+    {'Code':'6C','Name':'Denim Shirt','Price':40}
+    ]
+
+#Start
+money = int(input('Insert Money any amount to start the vending machine: '))
+print('Current Balance:', money, '$')
+print('Please Select A Brand Code:')
+brand = {
+    '1A':'H&M',  
+    '1B':'Uniqlo', 
+    '1C':'Zara'
+}
+
+print('_________________________________')
+for key, value in brand.items():
+    print(f'| Code: {key}\tBrand: {value}\t\t|')
+print('*********************************')
+brand1 = input('Select Brand Code: ')
+
+while brand1 not in brand:
+    print('Invalid Brand Code')
+    brand1 = input("Please enter valid brand code or [Q] to quit:")
+    if brand1.upper() == 'Q':
+        print("Thank you, have a great day.")
+        print(f"Please get your remaining balance of {money}$ from the 'change box!'")
+        break
+
+if brand1 in brand:
+    clear_screen()
+    print('You have selected:', brand[brand1])
+
+    if brand1 == '1A':
+        print('Pants')
+        display_items(HMpants, 'Pants')
+        print('Shirts')
+        display_items(HMshirts, 'Shirts')
+    elif brand1 =='1B':
+        print ('Pants')
+        display_items(UNIQLOpants, 'Pants')
+        print ('Shirts')
+        display_items(UNIQLOshirts, 'Shirts')
+    elif brand1 =='1C':
+        print ('Pants')
+        display_items(ZARApants,'Pants')
+        print ('Shirts')
+        display_items(ZARAshirts,'Shirts')
+
+
+    # CART
+    while True:
+        tempcart = input("Enter Shirt or Pant code (or 'Q' to finish): ")
+        if tempcart.upper() == 'Q':
+            break
+
+        item_found = False
+        
+        for item in HMpants + HMshirts + UNIQLOpants + UNIQLOshirts + ZARApants + ZARAshirts:
+            if tempcart == item['Code']:
+                cart.append(item)
+                total_price += item['Price']
+                print(f"Item {tempcart} added to the cart.")
+                item_found = True
+                break
+        
+        if not item_found:
+            print("Invalid item code. Please enter a valid code.")
+
+    # Receipt generation
+    print("\nFinal Shopping Cart:")
+    for item in cart:
+        print(f"Code: {item['Code']}, Name: {item['Name']}, Price: ${item['Price']}")
+
+    print(f"Total Price: ${total_price}")
+
+    # Handling payment
+    while True:
+        try:
+            payment = int(input("We added your initial money to your funds. Enter the amount paid: $"))
+            if payment+money >= total_price:
+                break
+            else:
+                print("Still not enough but we added your input to your funds")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+    money1= payment + money
+    change = money + payment - total_price
+    print(f"Change: ${change}")
+    
+    # Suggestions for pants based on selected shirts
+    if brand1 == '1A':
+        suggest_pants(cart[-1]['Code'], HMpants)
+    elif brand1 == '1B':
+        suggest_pants(cart[-1]['Code'], UNIQLOpants)
+    elif brand1 == '1C':
+        suggest_pants(cart[-1]['Code'], ZARApants)
